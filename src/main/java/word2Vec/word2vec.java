@@ -26,45 +26,11 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
 public class word2vec {
 public static void main (String args[]) throws IOException{
-	/*SentenceIterator iter = new LineSentenceIterator(new File("E:/work/Cell_Phones_and_Accessories.txt"));
-    iter.setPreProcessor(new SentencePreProcessor() {
-        public String preProcess(String sentence) {
-            return sentence.toLowerCase();
-        }
-    });
-
-    System.out.println("Hello");
- // Split on white spaces in the line to get words
-    TokenizerFactory t = new DefaultTokenizerFactory();
-    t.setTokenPreProcessor(new CommonPreprocessor());
-   // log.info("Building model....");
-    Word2Vec vec = new Word2Vec.Builder()
-            .minWordFrequency(1)
-            .iterations(1)
-            .layerSize(100)
-            .seed(42)
-            .windowSize(5)
-            .iterate(iter)
-            .tokenizerFactory(t)
-            .build();
-
-   // log.info("Fitting Word2Vec model....");
-    vec.fit();
-    WordVectorSerializer.writeFullModel(vec, "pathToSaveModelnew.txt");
-    
-    
-    double cosSim = vec.similarity("photo", "picture");
-    System.out.println(cosSim);
-    cosSim = vec.similarity("audio", "sound");
-    System.out.println(cosSim);
-    Collection<String> lst3 = vec.wordsNearest("audio", 10);
-    System.out.println(lst3);*/
 	
-	//part 2
 
 	   
-	Word2Vec vec = WordVectorSerializer.loadFullModel("pathToSaveModelnew.txt"); 
-	
+//Word2Vec vec = WordVectorSerializer.loadFullModel("pathToSaveModelnew.txt"); 
+	Word2Vec vec = WordVectorSerializer.loadFullModel(args[0]);
 	
 	String mat[][]=new String[][]{{"general","packaging","model","colour","color","sim"},
 			   {"display","resolution","pixel","led","LED","touchscreen","screen"},
@@ -79,8 +45,9 @@ public static void main (String args[]) throws IOException{
 	
 	
 	
-	 String str="E:\\work\\Deepanshu\\OUTPUT_CORPORA\\annote.txt";  //Set the path for correctly formatted review data file. 
-		BufferedReader in= new BufferedReader(new FileReader(str));
+	 //String str="E:\\work\\Deepanshu\\OUTPUT_CORPORA\\annote.txt";  //Set the path for correctly formatted review data file. 
+	String str=args[1];
+	BufferedReader in= new BufferedReader(new FileReader(str));
 		String sCurrentLine;
 		int max=Integer.MIN_VALUE;
 		while((sCurrentLine = in.readLine()) != null){
@@ -96,8 +63,9 @@ public static void main (String args[]) throws IOException{
 	   for(int i=0;i<featureVec.length;i++)
 		   for(int j=0;j<featureVec[0].length;j++)
 			   featureVec[i][j]=0;
-	 str="E:\\work\\Deepanshu\\OUTPUT_CORPORA\\annote.txt";  //Set the path for correctly formatted review data file. 
-	 in= new BufferedReader(new FileReader(str));
+	// str="E:\\work\\Deepanshu\\OUTPUT_CORPORA\\annote.txt";  //Set the path for correctly formatted review data file. 
+	 str=args[1];
+	   in= new BufferedReader(new FileReader(str));
 	
 	while((sCurrentLine = in.readLine()) != null){
 		int reviewid=Integer.parseInt(sCurrentLine.substring(0, sCurrentLine.indexOf('@')));
@@ -139,6 +107,22 @@ public static void main (String args[]) throws IOException{
 		   System.out.println();
 	}
 	  
+	File file = new File("../output/featureDistributionMatrix.txt");
+	// if file doesnt exists, then create it
+	if (!file.exists()) {
+		file.createNewFile();
+	}
+	FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	BufferedWriter bw = new BufferedWriter(fw);
+	for(int i=0;i<featureVec.length;i++){
+		   for(int j=0;j<featureVec[0].length;j++)
+			   bw.write(featureVec[i][j]+" ");
+		   bw.write("\r\n");
+	}	   
+	
+	
+	
+		   bw.close();
 	
 
 }
